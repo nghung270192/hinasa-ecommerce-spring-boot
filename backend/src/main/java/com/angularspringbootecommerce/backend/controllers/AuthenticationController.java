@@ -19,6 +19,8 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public User register(@Valid @RequestBody UserDto user) {
+        System.out.println("nghung");
+        System.out.println(user);
         if (user.getEmail() == null || user.getEmail().isEmpty() || user.getPassword() == null || user.getPassword().isEmpty()) {
             throw new AppException("All fields are required.", HttpStatus.BAD_REQUEST);
         }

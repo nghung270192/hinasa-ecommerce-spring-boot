@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
@@ -30,10 +31,10 @@ public class ProductController {
     public Product add(@RequestBody ProductDto productDto) {
         if (
                 productDto.getName() == null ||
-                productDto.getName().isEmpty() ||
-                productDto.getDescription() == null || productDto.getDescription().isEmpty() ||
-                productDto.getImgUrl() == null || productDto.getImgUrl().isEmpty() ||
-                productDto.getPrice().compareTo(BigDecimal.ZERO) <= 0) {
+                        productDto.getName().isEmpty() ||
+                        productDto.getDescription() == null || productDto.getDescription().isEmpty() ||
+                        productDto.getImgUrl() == null || productDto.getImgUrl().isEmpty() ||
+                        productDto.getPrice().compareTo(BigDecimal.ZERO) <= 0) {
 
             throw new AppException("All fields are required.", HttpStatus.BAD_REQUEST);
         }
@@ -47,8 +48,8 @@ public class ProductController {
     }
 
     @GetMapping("/{productId}")
-    public ResponseEntity<?> getProductById(@PathVariable Long productId) {
-        Optional<Product> productOptional = productService.getProductById(productId);
+    public ResponseEntity<?> getProductById(@PathVariable String productId) {
+        Optional<Product> productOptional = productService.getProductById(UUID.fromString(productId));
 
         if (productOptional.isPresent()) {
             Product product = productOptional.get();

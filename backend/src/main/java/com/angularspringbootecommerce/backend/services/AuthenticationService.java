@@ -40,10 +40,15 @@ public class AuthenticationService {
         String encodedPassword = passwordEncoder.encode(password);
 
         UserRole userRole = userRoleRepository.findByAuthority("USER").get();
+//        userRole.setId(234L);
+//        userRole.setAuthority("USER");
+        System.out.println(userRole);
         Set<UserRole> authorities = new HashSet<>();
 
         authorities.add(userRole);
 
+        System.out.println(email);
+        System.out.println(password);
         return userRepository.save(new User(email, encodedPassword, authorities));
     }
 

@@ -1,6 +1,6 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
 
 export interface User {
   id: string;
@@ -19,14 +19,15 @@ export interface UserDto {
 export class UserService {
   private baseUrl = 'http://localhost:8080/api/v1/user';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
   getUserDetails(userId: string): Observable<User> {
     const token = localStorage.getItem('access_token');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,
     });
-    const options = { headers };
+    const options = {headers};
     const url = `${this.baseUrl}/${userId}`;
     return this.http.get<User>(url, options);
   }
@@ -36,7 +37,7 @@ export class UserService {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,
     });
-    const options = { headers };
+    const options = {headers};
     const url = `${this.baseUrl}/update/${userId}`;
     return this.http.put<User>(url, userDto, options);
   }

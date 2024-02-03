@@ -13,6 +13,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 
 @Service
 public class UserService implements UserDetailsService {
@@ -28,7 +30,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findByEmail(email).orElseThrow(() -> new AppException("User not found.", HttpStatus.NOT_FOUND));
     }
 
-    public User getUserById(Long id, Authentication authentication) {
+    public User getUserById(UUID id, Authentication authentication) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new AppException("User not found.", HttpStatus.NOT_FOUND));
         if (!user.getEmail().equals(authentication.getName())) {
@@ -37,7 +39,7 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    public User updateUserById(Long id, UserDto userDto, Authentication authentication) {
+    public User updateUserById(UUID id, UserDto userDto, Authentication authentication) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new AppException("User not found", HttpStatus.NOT_FOUND));
         if (!user.getEmail().equals(authentication.getName())) {

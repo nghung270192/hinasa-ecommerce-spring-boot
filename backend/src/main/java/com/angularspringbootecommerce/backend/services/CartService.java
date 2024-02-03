@@ -31,7 +31,7 @@ public class CartService {
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
 
-    public CartDto getCartByUserId(Long userId) {
+    public CartDto getCartByUserId(UUID userId) {
         Optional<Cart> userCart = cartRepository.findByUserId(userId);
         if (userCart.isPresent()) {
             Cart cart = userCart.get();
@@ -42,10 +42,10 @@ public class CartService {
 
             List<CartItemDto> cartItemDtos = getCartItemDto(cart);
 
-            Map<Long, CartItemDto> cartItemMap = new HashMap<>();
+            Map<UUID, CartItemDto> cartItemMap = new HashMap<>();
 
             for (CartItemDto cartItemDto : cartItemDtos) {
-                Long productId = cartItemDto.getProductId();
+                UUID productId = cartItemDto.getProductId();
                 if (cartItemMap.containsKey(productId)) {
                     CartItemDto existingItem = cartItemMap.get(productId);
                     existingItem.setQuantity(existingItem.getQuantity() + cartItemDto.getQuantity());
@@ -59,7 +59,7 @@ public class CartService {
             cartDto.setCartItems(consolidatedCartItems);
 
             for (CartItemDto consolidatedCartItem : consolidatedCartItems) {
-                Long productId = consolidatedCartItem.getProductId();
+                UUID productId = consolidatedCartItem.getProductId();
                 Product product = productRepository.findById(productId)
                         .orElseThrow(() -> new AppException("Product not found", HttpStatus.NOT_FOUND));
 
@@ -80,7 +80,7 @@ public class CartService {
         }
     }
 
-    public int getNumberOfItemsInCart(Long userId) {
+    public int getNumberOfItemsInCart(UUID userId) {
         Optional<Cart> userCart = cartRepository.findByUserId(userId);
         if (userCart.isPresent()) {
             Cart cart = userCart.get();
@@ -107,7 +107,7 @@ public class CartService {
         return cartItemDtos;
     }
 
-    public CartDto addItemToCart(Long userId, Long productId, int quantity) {
+    public CartDto addItemToCart(UUID userId, UUID productId, int quantity) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException("User not found", HttpStatus.NOT_FOUND));
 
@@ -157,7 +157,7 @@ public class CartService {
         return CartMapper.INSTANCE.cartToCartDto(userCart, totalPrice, cartItemDtos);
     }
 
-    public CartDto removeItemFromCart(Long userId, Long productId) {
+    public CartDto removeItemFromCart(UUID userId, UUID productId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException("User not found", HttpStatus.NOT_FOUND));
 
@@ -185,12 +185,12 @@ public class CartService {
         return CartMapper.INSTANCE.cartToCartDto(userCart, totalPrice, cartItemDtos);
     }
 
-    public Cart getCartEntityByUserId(Long userId) {
+    public Cart getCartEntityByUserId(UUID userId) {
         return cartRepository.findByUserId(userId).orElseThrow(() ->
                 new AppException("Cart not found for user id: " + userId, HttpStatus.NOT_FOUND));
     }
 
-    public void clearCart(Long userId) {
+    public void clearCart(UUID userId) {
         Cart cart = getCartEntityByUserId(userId);
         if (cart != null) {
             cart.getCartItems().clear();

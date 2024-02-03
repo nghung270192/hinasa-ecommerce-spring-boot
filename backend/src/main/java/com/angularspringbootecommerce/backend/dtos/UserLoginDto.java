@@ -2,11 +2,15 @@ package com.angularspringbootecommerce.backend.dtos;
 
 import com.angularspringbootecommerce.backend.models.User;
 import lombok.Getter;
+import lombok.Setter;
+
+import java.util.UUID;
 
 @Getter
 public class UserLoginDto {
 
-    private Long id;
+    @Setter
+    private UUID id;
     private User user;
     private String jwt;
 
@@ -14,13 +18,10 @@ public class UserLoginDto {
         super();
     }
 
-    public UserLoginDto(Long id, User user, String jwt) {
+    public UserLoginDto(UUID id, User user, String jwt) {
         this.id = id;
         this.user = user;
         this.jwt = jwt;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 }

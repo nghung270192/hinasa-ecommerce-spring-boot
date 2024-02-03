@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/services/auth.service';
-import { User, UserService } from '../services/user.service';
+import {Component, OnInit} from '@angular/core';
+import {AuthService} from 'src/app/services/auth.service';
+import {User, UserService} from '../services/user.service';
 
 @Component({
   selector: 'app-header',
@@ -14,20 +14,19 @@ export class HeaderComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private userService: UserService
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.isLoggedIn = !!localStorage.getItem('access_token');
     this.authService.loggedIn.subscribe((loggedIn) => {
       this.isLoggedIn = loggedIn;
-  
+
       if (loggedIn) {
         const userId = localStorage.getItem('user_id');
-  
+
         if (userId) {
-          const userIdNumber = +userId;
-  
-          this.userService.getUserDetails(userIdNumber.toString()).subscribe(
+          this.userService.getUserDetails(userId).subscribe(
             (response: any) => {
               console.log('User details:', response);
               this.userDetails = response;
@@ -41,13 +40,11 @@ export class HeaderComponent implements OnInit {
         this.userDetails = undefined;
       }
     });
-  
+
     const userId = localStorage.getItem('user_id');
-  
+
     if (userId) {
-      const userIdNumber = +userId;
-  
-      this.userService.getUserDetails(userIdNumber.toString()).subscribe(
+      this.userService.getUserDetails(userId).subscribe(
         (response: any) => {
           console.log('User details:', response);
           this.userDetails = response;

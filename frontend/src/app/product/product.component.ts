@@ -1,9 +1,9 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { ProductService, Product } from 'src/app/services/product.service';
-import { CartService } from '../services/cart.service';
-import { catchError } from 'rxjs/operators';
-import { EMPTY } from 'rxjs';
+import {Component, OnInit, ChangeDetectorRef} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {ProductService, Product} from 'src/app/services/product.service';
+import {CartService} from '../services/cart.service';
+import {catchError} from 'rxjs/operators';
+import {EMPTY} from 'rxjs';
 
 @Component({
   selector: 'app-product',
@@ -19,7 +19,8 @@ export class ProductComponent implements OnInit {
     private productService: ProductService,
     private cartService: CartService,
     private cdRef: ChangeDetectorRef,
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     const productId = this.route.snapshot.params['id'];
@@ -37,19 +38,19 @@ export class ProductComponent implements OnInit {
       );
   }
 
-  addToCart(productId: number, quantity: number) {
+  addToCart(productId: string, quantity: number) {
     this.productService.addToCart(productId, quantity).subscribe(
       response => {
         console.log('Product added to cart:', response);
-  
+
         const userId = localStorage.getItem('user_id');
-  
+
         if (userId) {
-          this.cartService.getCartItemsCount(+userId).subscribe(
+          this.cartService.getCartItemsCount(userId).subscribe(
             (count: number) => {
               alert("Product added to cart.");
               this.cartService.updateCartItemCount(count);
-              this.cdRef.detectChanges(); 
+              this.cdRef.detectChanges();
               window.location.reload();
             },
             (error: any) => {

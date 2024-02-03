@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { CartItem, CartService } from 'src/app/services/cart.service';
+import {Component, OnInit} from '@angular/core';
+import {CartItem, CartService} from 'src/app/services/cart.service';
 
 @Component({
   selector: 'app-checkout',
@@ -10,7 +10,8 @@ export class CheckoutComponent implements OnInit {
   cartItems: any[] = [];
   totalPrice: number = 0;
 
-  constructor(private cartService: CartService) {}
+  constructor(private cartService: CartService) {
+  }
 
   ngOnInit() {
     console.log('Checkout component initialized.');
@@ -19,10 +20,9 @@ export class CheckoutComponent implements OnInit {
     const jwt = localStorage.getItem('access_token');
 
     if (userId && jwt) {
-      const userIdNumber = +userId;
-      console.log('User ID number:', userIdNumber);
+      console.log('User ID number:', userId);
 
-      this.cartService.getCartItems(userIdNumber).subscribe(
+      this.cartService.getCartItems(userId).subscribe(
         (cart: any) => {
           console.log('Received cart data:', cart);
           this.cartItems = cart.cart.cartItems.map((item: any) => ({
@@ -44,11 +44,11 @@ export class CheckoutComponent implements OnInit {
     }
   }
 
-  removeCartItem(productId: number) {
+  removeCartItem(productId: string) {
     const userId = localStorage.getItem('user_id');
 
     if (userId) {
-      this.cartService.removeCartItem(+userId, productId).subscribe(
+      this.cartService.removeCartItem(userId, productId).subscribe(
         (updatedCartItems: CartItem[]) => {
           this.cartItems = updatedCartItems;
           window.location.reload();

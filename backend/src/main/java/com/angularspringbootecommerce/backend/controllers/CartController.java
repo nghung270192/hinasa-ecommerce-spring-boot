@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
@@ -20,12 +21,12 @@ public class CartController {
     private final CartService cartService;
 
     @GetMapping("/{userId}")
-    public ResponseEntity<Map<String, Object>> getCartByUserId(@PathVariable Long userId) {
+    public ResponseEntity<Map<String, Object>> getCartByUserId(@PathVariable String userId) {
         Map<String, Object> response = new HashMap<>();
-        CartDto cartDto = cartService.getCartByUserId(userId);
+        CartDto cartDto = cartService.getCartByUserId(UUID.fromString(userId));
         if (cartDto != null) {
             response.put("cart", cartDto);
-            response.put("numberOfItemsInCart", cartService.getNumberOfItemsInCart(userId));
+            response.put("numberOfItemsInCart", cartService.getNumberOfItemsInCart(UUID.fromString(userId)));
             return ResponseEntity.ok().body(response);
         } else {
             throw new AppException("User's cart not found", HttpStatus.NOT_FOUND);
@@ -33,14 +34,15 @@ public class CartController {
     }
 
     @PostMapping("/{userId}/{productId}/{quantity}")
-    public ResponseEntity<CartDto> addItemToCart(@PathVariable Long userId, @PathVariable Long productId, @PathVariable int quantity) {
-        CartDto cartDto = cartService.addItemToCart(userId, productId, quantity);
+    public ResponseEntity<CartDto> addItemToCart(@PathVariable String userId, @PathVariable String productId,
+                                                 @PathVariable int quantity) {
+        CartDto cartDto = cartService.addItemToCart(UUID.fromString(userId), UUID.fromString(productId), quantity);
         return ResponseEntity.ok().body(cartDto);
     }
 
     @DeleteMapping("/{userId}/{productId}")
-    public ResponseEntity<CartDto> removeItemFromCart(@PathVariable Long userId, @PathVariable Long productId) {
-        CartDto cartDto = cartService.removeItemFromCart(userId, productId);
+    public ResponseEntity<CartDto> removeItemFromCart(@PathVariable String userId, @PathVariable String productId) {
+        CartDto cartDto = cartService.removeItemFromCart(UUID.fromString(userId), UUID.fromString(productId));
         return ResponseEntity.ok().body(cartDto);
     }
 }

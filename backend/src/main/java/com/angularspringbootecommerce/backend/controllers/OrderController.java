@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,19 +27,19 @@ public class OrderController {
     private final PaymentService paymentService;
 
     @GetMapping("/{userId}")
-    public List<OrderDto> getOrdersByUserId(@PathVariable Long userId, Authentication authentication) {
+    public List<OrderDto> getOrdersByUserId(@PathVariable UUID userId, Authentication authentication) {
         return orderService.getOrdersByUserId(userId, authentication);
     }
 
     @PostMapping("/{userId}/checkout")
-    public ResponseEntity<PaymentDto> checkout(@PathVariable Long userId, Authentication authentication) throws StripeException {
-        CartDto cart = cartService.getCartByUserId(userId);
+    public ResponseEntity<PaymentDto> checkout(@PathVariable String userId, Authentication authentication) throws StripeException {
+        CartDto cart = cartService.getCartByUserId(UUID.fromString(userId));
         BigDecimal totalPrice = cart.getTotalPrice();
         PaymentIntent paymentIntent = paymentService.createPaymentIntent(totalPrice);
 
-        Order createdOrder = orderService.createOrderFromCart(cart, userId, authentication);
+        Order createdOrder = orderService.createOrderFromCart(cart, UUID.fromString(userId), authentication);
 
-        cartService.clearCart(userId);
+        cartService.clearCart(UUID.fromString(userId));
 
         PaymentDto paymentDto = new PaymentDto(paymentIntent.getClientSecret(), totalPrice, "usd", createdOrder.getId());
 

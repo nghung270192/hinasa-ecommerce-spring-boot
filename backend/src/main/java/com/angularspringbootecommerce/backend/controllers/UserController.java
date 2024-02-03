@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RequiredArgsConstructor
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
@@ -17,12 +19,12 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/{userId}")
-    public User getUserById(@PathVariable Long userId, Authentication authentication) {
-        return userService.getUserById(userId, authentication);
+    public User getUserById(@PathVariable String userId, Authentication authentication) {
+        return userService.getUserById(UUID.fromString(userId), authentication);
     }
 
     @PutMapping("/update/{userId}")
-    public User updateUserById(@PathVariable Long userId, @RequestBody UserDto userDto, Authentication authentication) {
-        return userService.updateUserById(userId, userDto, authentication);
+    public User updateUserById(@PathVariable String userId, @RequestBody UserDto userDto, Authentication authentication) {
+        return userService.updateUserById(UUID.fromString(userId), userDto, authentication);
     }
 }

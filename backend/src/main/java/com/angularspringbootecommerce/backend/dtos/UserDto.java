@@ -1,5 +1,8 @@
 package com.angularspringbootecommerce.backend.dtos;
 
+import lombok.Data;
+
+@Data
 public class UserDto {
 
     private String email;

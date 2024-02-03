@@ -2,8 +2,10 @@ package com.angularspringbootecommerce.backend.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -11,10 +13,14 @@ import java.math.BigDecimal;
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    private UUID id;
     private String name;
     private String description;
     private BigDecimal price;
     private String imgUrl;
+//    private BigDecimal quantityTotal;
+//    private BigDecimal quantitySold;
+//    private UUID catalogueId;
 }

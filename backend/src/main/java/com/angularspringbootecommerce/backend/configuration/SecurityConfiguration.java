@@ -26,6 +26,8 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.DefaultSecurityFilterChain;
 
+import java.util.List;
+
 @Configuration
 public class SecurityConfiguration {
 
@@ -50,6 +52,7 @@ public class SecurityConfiguration {
 
     @Bean
     public DefaultSecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {

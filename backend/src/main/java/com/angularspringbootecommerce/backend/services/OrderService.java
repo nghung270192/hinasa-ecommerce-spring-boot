@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 
 @Service
@@ -22,7 +23,7 @@ public class OrderService {
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
 
-    public List<OrderDto> getOrdersByUserId(Long userId, Authentication authentication) {
+    public List<OrderDto> getOrdersByUserId(UUID userId, Authentication authentication) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException("User not found.", HttpStatus.NOT_FOUND));
 
@@ -44,7 +45,7 @@ public class OrderService {
         return orderDtos;
     }
 
-    public Order createOrderFromCart(CartDto cart, Long userId, Authentication authentication) {
+    public Order createOrderFromCart(CartDto cart, UUID userId, Authentication authentication) {
         User user = userRepository.findById(userId).orElseThrow(() -> new AppException("User not found", HttpStatus.NOT_FOUND));
 
         if (authentication == null || !user.getEmail().equals(authentication.getName())) {
